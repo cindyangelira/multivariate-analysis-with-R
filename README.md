@@ -4,7 +4,7 @@ This project is a part of the [Data Science Project](https://xxx) in R.
 #### -- Project Status: [Active]
 
 ## Project Intro/Objective
-The purpose of this project is to predict Octopus user churn and customer lifetime value prediction. 
+The purpose of this project is to perform various approaches in multivariate analysis within R environment.
 
 ### Methods Used
 * PCA Analysis

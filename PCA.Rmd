@@ -1,0 +1,281 @@
+---
+title: "PCA Analysis"
+author: "Nadia Ahmad"
+date: "2023-02-09"
+output: pdf_document
+---
+
+# PCA Analysis on Travel Discrimination
+\
+Dataset explanation:
+| Variable  | Description                                                                   |
+|-----------|-------------------------------------------------------------------------------|
+| Q1        | Frequency of traveling                                                        |
+| Q2        | Discrimination                                                                |
+| Q3        | Have the respondent ever made complaint                                       |
+| Q4        | Travel award or voucher                                                       |
+| Q5        | Visibly represent religion                                                    |
+| Q6_15     | Checkin experience rate                                                       |
+| Q6_16     | Bag drop off experience rate                                                  |
+| Q6_17     | Security line experience rate                                                 |
+| Q6_18     | Boarding airplane experience rate                                             |
+| Q6_19     | Baggage claim experience rate                                                 |
+| Q8        | Have respondent ever been denied by entry due to racial profile               |
+| Q9        | Have respondent ever avoided air travel due to racial profile                 |
+| Q10       | Have respondent ever been asked to deplane by entry due to racial profile     |
+| Q11       | Have respondent ever been detained at the airport                             |
+| Q12       | Have respondent ever been developed strategy to avoid being racially profiled |
+| Q13       | Do respondent have ethnic sounding name                                       |
+| Q14       | Age                                                                           |
+| Q15       | Gender                                                                        |
+| Q16       | US citizenship                                                                |
+| Q17       | Best description of respondent                                                |
+| Q18       | Religious affiliation                                                         |
+| Q19       | Chronic illness                                                               |
+| prefer_   | airlines that respondent prefer                                               |
+| avoid_    | airlines that avoided                                                         |
+| not_flown | airlines that haven't been flew with                                          |
+
+## Library
+```{r}
+library(readr)
+library(tidyverse)
+library(XML)
+library(corrplot)
+library(factoextra)
+library(MASS)
+library(mvtnorm)
+library(MVN)
+library(psych)
+library(ggfortify)
+library(ggpubr)
+```
+
+## Read the dataset
+
+```{r}
+travel_df <- read_csv("Travel Study 2.7.23.csv")
+head(travel_df)
+str(travel_df)
+```
+
+Dataset contains 207 rows and 82 columns which is still messy. Thus, we'll conduct some data preprocessing steps.\
+\
+## DATA PREPROCESSING
+
+```{r}
+# First, drop two first rows. Next, filter only data that has 100 in progress
+travel_df <- travel_df %>% 
+  slice(-c(1,2)) %>%
+  filter(Progress == '100')
+
+# Drop the first 11 columns since it contains the questionnaire status
+travel_df_clean <- travel_df[-c(1:11)]
+
+# Drop all column that contains _RANK in the end of the name
+travel_df_clean <- travel_df_clean[!grepl("_RANK$", names(travel_df_clean))]
+
+# Drop optional column named Q20 and column contains _TEXT in the end of name
+travel_df_clean <- travel_df_clean[!grepl("_TEXT$", names(travel_df_clean))]
+travel_df_clean <- subset(travel_df_clean, select = -c(Q20))
+
+# CHECK MISSING VALUE----
+# Count the missing values by column wise
+print("Count of missing values by column wise")
+sapply(travel_df_clean, function(x) sum(is.na(x)))
+
+# Missing value imputation
+# Since our data contains 46 missing value, let's impute with mode
+# Function to see mode
+calc_mode <- function(x){
+  
+  # List the distinct / unique values
+  distinct_values <- unique(na.omit(x))
+  
+  # Count the occurrence of each distinct value
+  distinct_tabulate <- tabulate(match(x, distinct_values))
+  
+  # Return the value with the highest occurrence
+  distinct_values[which.max(distinct_tabulate)]
+}
+
+calc_mode(travel_df_clean$Q8)
+calc_mode(travel_df_clean$Q7_0_GROUP)
+calc_mode(travel_df_clean$Q7_1_GROUP)
+calc_mode(travel_df_clean$Q7_2_GROUP)
+
+
+# Impute missing value----
+travel_df_clean <- travel_df_clean %>% 
+  mutate(across(everything(), ~replace_na(.x, calc_mode(.x))))
+
+
+# CONVERT DATA TYPE----
+# First, convert column Q6_15 - Q6_19 to numeric data type
+travel_df_clean[6:10] <- lapply(travel_df_clean[6:10], as.numeric)
+
+# Second convert to character exclude Q7_0_GROUP , Q7_1_GROUP, Q7_2_GROUP to numeric
+exclude <- travel_df_clean[,6:13]
+
+travel_df_clean[,-6:-13] <- lapply(travel_df_clean[,-6:-13], factor)
+travel_df_clean[,-6:-13] <- sapply(travel_df_clean[,-6:-13], as.numeric)
+
+
+# CONVERT Q7_0_GROUP , Q7_1_GROUP, Q7_2_GROUP to dummy----
+travel_df_clean =  travel_df_clean%>% 
+  separate_rows(Q7_0_GROUP, sep = ",") %>% 
+  mutate(Q7_0_GROUP = as.factor(Q7_0_GROUP)) %>% mutate(seen =1) %>%
+  pivot_wider(names_from = Q7_0_GROUP, values_from = seen, 
+              names_prefix = 'prefer_', values_fn =  list(seen = length), values_fill = 0)
+
+travel_df_clean =  travel_df_clean%>% 
+  separate_rows(Q7_1_GROUP, sep = ",") %>% 
+  mutate(Q7_1_GROUP = as.factor(Q7_1_GROUP)) %>% mutate(seen =1) %>%
+  pivot_wider(names_from = Q7_1_GROUP, values_from = seen, 
+              names_prefix = 'avoid_', values_fn =  list(seen = length), values_fill = 0)
+
+travel_df_clean =  travel_df_clean%>% 
+  separate_rows(Q7_2_GROUP, sep = ",") %>% 
+  mutate(Q7_2_GROUP = as.factor(Q7_2_GROUP)) %>% mutate(seen =1) %>%
+  pivot_wider(names_from = Q7_2_GROUP, values_from = seen, 
+              names_prefix = 'not_flown_', values_fn =  list(seen = length), values_fill = 0)
+
+head(travel_df_clean)
+```
+
+## EXPLORATORY DATA ANALYSIS
+### 1. Summary Statistics
+```{r}
+mvn(travel_df_clean, mvnTest = "royston", univariatePlot = "qq")
+```
+\
+### 2. Histogram 
+We'll look at into data distribution via histograms. However, since our dataset contains large column. We'll separate the plot into some chunks. One chunk contains 9 subplots.
+\
+```{r}
+mvn(travel_df_clean[,1:9], mvnTest = "energy", univariatePlot = "histogram")
+mvn(travel_df_clean[,10:18], mvnTest = "energy", univariatePlot = "histogram")
+mvn(travel_df_clean[,19:27], mvnTest = "energy", univariatePlot = "histogram")
+mvn(travel_df_clean[,28:36], mvnTest = "energy", univariatePlot = "histogram")
+mvn(travel_df_clean[,37:45], mvnTest = "energy", univariatePlot = "histogram")
+mvn(travel_df_clean[,46:54], mvnTest = "energy", univariatePlot = "histogram")
+mvn(travel_df_clean[,55:61], mvnTest = "energy", univariatePlot = "histogram")
+```
+
+### 3. Boxplot
+Since our data contains many dummy variables (started with prefer_, avoid_, and not_flown_),
+we'll only generate one plot for this type of data. Again, we'll divide plot into some chunks.
+\
+```{r}
+mvn(travel_df_clean[,1:5], mvnTest = "royston", univariatePlot = "box")
+mvn(travel_df_clean[,6:10], mvnTest = "royston", univariatePlot = "box")
+mvn(travel_df_clean[,11:20], mvnTest = "royston", univariatePlot = "box")
+mvn(travel_df_clean[,21:23], mvnTest = "royston", univariatePlot = "box")
+```
+
+### 4. QQ-Plot
+Since we got error in integer variable, `system is exactly singular: U[2,2] = 0`, thus we'll do chi-square quantile plot in numeric (var 6 -10) only.
+```{r}
+mvn(travel_df_clean[,6:10], mvnTest = "royston", multivariatePlot = "scatter", 
+    multivariateOutlierMethod="quan")
+```
+
+## CORRELATION MATRIX
+```{r}
+corrplot(cor(travel_df_clean), 
+         method="ellipse",
+         tl.pos="n",
+         title="Matrix Correlations")
+
+correlation = cor(travel_df_clean)
+```
+```{r}
+correlation[1:20,1:20]
+```
+
+We called 20x20 of our correlation matrix. Basically, PCA should be used mainly for variables which are strongly correlated. If the relationship is weak between variables, PCA does not work well to reduce data. Refer to the correlation matrix we obtained. In general, if most of the correlation coefficients are smaller than 0.3, PCA will not help.Since some variables are highly correlated and some aren't. PCA will work for some variable and not for the weak correlation.\
+
+## PRINCIPLE COMPONENT ANALYSIS
+## 1. PCA Summary
+```{r}
+pca <- prcomp(correlation)
+summary(pca)
+```
+\
+### 2. Scree Plot
+```{r}
+fviz_screeplot(pca, type = "lines", addlabels = TRUE,
+               main = "Scree Plot PCA using All Variables")
+```
+```{r}
+var <- get_pca_var(pca)
+corrplot(var$contrib, is.corr = FALSE)
+```
+```{r}
+print(pca$rotation,digits = 8, cutoff = 0.01, 10)
+```
+
+Using all of variables we have, our first Principle Component can only explain 24.1% of variance in dataset.\
+Thus, we'll build the second PCA, by dropping all dummy variables.\
+\
+
+## PRINCIPLE COMPONENT ANALYSIS MODEL 2
+### 1. PCA Summary
+```{r}
+correlation2 <- cor(travel_df_clean[,1:22])
+pca2 <- princomp(correlation2)
+summary(pca2)
+```
+
+### 2. Scree Plot
+```{r}
+fviz_screeplot(pca2, type = "lines", addlabels = TRUE,
+               main = "Scree Plot PCA without Dummy")
+```
+
+By dropping all dummy variables, our first principle component explanation variability increase to 49%.\
+Next, let investigate the eigen value of each PC.
+
+### 3. Eigen Value
+```{r}
+eig_val2 <- get_eigenvalue(pca2)
+eig_val2
+```
+However, our PC1 only has 0.728 eigen value. If we use KM1 rule (threshold of 1), we can't say the PCA didn't work for our data since there is no value is greater than 1.\
+Let's look at for parallel analysis (since it use Monte Carlo concept.)
+
+### 4. Parallel Analysis
+```{r}
+fa.parallel(correlation2,fm='pa', fa='fa',main = 'Parallel Analysis Scree Plot', n.iter=500)
+```
+By using parallel analysis, it suggests us to retain 3 principle component.
+
+#### 5. Loadings
+```{r}
+print(pca2$loadings[, 1:3],digits = 8, cutoff = 0.01)
+```
+* By investagting loadings, we see highest positive value by Q6_15 to Q6_19 in PC1. Thus, we can assume PC1 explains about respondent's flight travel rate. 
+* In PC2, we see high loadings in Q14, Q15, Q17, Q19. Thus we can assume that PC2 represents the racial profile of respondent. 
+* In PC3, we see high positive loadings in PC3, PC4, PC17. We can assume this component depicts the travel experience.
+
+### 6. Ellipse Plot
+#### 6.1 Via Autoplot
+```{r}
+autoplot(pca2, 
+         loadings = TRUE, loadings.colour = 'blue',
+         loadings.label = TRUE, loadings.label.size = 3)
+```
+
+#### 6.2 Via Biplot
+```{r}
+pca_2_ <- prcomp(travel_df_clean[,1:22], center = TRUE, scale = TRUE)
+fviz_pca_biplot(pca_2_,
+                col.ind = travel_df_clean$Q15, # color by groups
+                palette = c('#00AFBB', '#E7B800', '#FC4E07'),
+                geom.ind = 'points', # show points only (nbut not “text”)
+                addEllipses = TRUE,
+                legend.title = 'Gender'# Concentration ellipses
+                )
+```
+
+In this biplot, we tried to generate ellipse curve by differentiate it by gender. However we only have 136 rows that trigger warning when calculating ellips.

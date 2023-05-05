@@ -1,0 +1,288 @@
+---
+title: "Discriminant Analysis"
+author: "Nadia Ahmad"
+date: "2023-02-18"
+output: pdf_document
+---
+
+# PCA Analysis on Travel Discrimination
+\
+Dataset explanation:
+1. Dependent Variable:
+* Q1 = travel frequency
+2. Independent Variables:
+* Q6_15 = Checkin experience rate 
+* Q6_16 = Bag drop off experience rate  
+* Q6_17 = Security line experience rate
+* Q6_18 = Boarding airplane experience rate  
+* Q6_19 = Travel experience compared to other travelers rate
+* Q14 = Age Group
+* Q15 = Gender
+* Q16 = US citizenship
+* Q17 = Race
+\
+## Library
+```{r,warning=FALSE,message=FALSE}
+library(readr)
+library(tidyverse)
+library(XML)
+library(corrplot)
+library(factoextra)
+library(MASS)
+library(mvtnorm)
+library(MVN)
+library(psych)
+library(ggfortify)
+library(ggpubr)
+library(mvoutlier)
+library(heplots)
+library(e1071)
+library(caret)
+library(klaR)
+```
+
+## Read the dataset
+
+```{r}
+travel_df <- read_csv("Travel Study 2.14.23.csv")
+head(travel_df)
+```
+
+Dataset contains 230 rows and 89 columns which is still messy. Thus, we'll conduct some data preprocessing steps.\
+\
+## DATA PREPROCESSING
+
+```{r}
+# First, drop two first rows. Next, filter only data that has 100 in progress
+travel_df <- travel_df %>% 
+  slice(-c(1,2)) %>%
+  filter(Progress == '100')
+
+# Drop the first 11 columns since it contains the questionnaire status
+travel_df_clean <- travel_df[-c(1:18)]
+
+# Drop all column that contains _RANK in the end of the name
+travel_df_clean <- travel_df_clean[!grepl("_RANK$", names(travel_df_clean))]
+
+# Drop optional column named Q20 and column contains _TEXT in the end of name
+travel_df_clean <- travel_df_clean[!grepl("_TEXT$", names(travel_df_clean))]
+
+```
+
+
+```{r}
+# Select used columns
+travel_df_clean <- subset(travel_df_clean, select = c(Q1, Q6_15, Q6_16,
+                                                      Q6_17, Q6_18, Q6_19,
+                                                      Q14, Q15, Q16, Q17))
+```
+
+
+```{r}
+# CHECK MISSING VALUE----
+# Count the missing values by column wise
+print("Count of missing values by column wise")
+sapply(travel_df_clean, function(x) sum(is.na(x)))
+
+# Missing value imputation
+# Since our data contains 46 missing value, let's impute with mode
+# Function to see mode
+calc_mode <- function(x){
+  
+  # List the distinct / unique values
+  distinct_values <- unique(na.omit(x))
+  
+  # Count the occurrence of each distinct value
+  distinct_tabulate <- tabulate(match(x, distinct_values))
+  
+  # Return the value with the highest occurrence
+  distinct_values[which.max(distinct_tabulate)]
+}
+
+# Impute missing value----
+travel_df_clean <- travel_df_clean %>% 
+  mutate(across(everything(), ~replace_na(.x, calc_mode(.x))))
+```
+
+
+```{r}
+# CONVERT DATA TYPE----
+# Convert all variables into integer
+# Convert column 2 to 6 to numeric
+travel_df_clean[,1:10] <- sapply(travel_df_clean[,1:10], as.integer)
+travel_df_clean[,2:6] <- sapply(travel_df_clean[,2:6], as.numeric)
+head(travel_df_clean)
+```
+
+```{r}
+# Rename column name
+travel_df_clean <- travel_df_clean %>% 
+       rename(travel_frequency = 1, checkin_exp = 2,
+              baggage_exp = 3, security_exp = 4, boarding_exp =5,
+              travel_exp = 6, age = 7, gender =8, citizenship = 9,
+              race = 10)
+head(travel_df_clean)
+```
+
+## EXPLORATORY DATA ANALYSIS
+### 1. Summary Statistics
+```{r}
+mvn(travel_df_clean, mvnTest = "royston", univariatePlot = "qq")
+```
+\
+### 2. Detecting Outliers
+\
+We'll look at outlier in first 6 columns in variable.
+```{r}
+aq.plot(travel_df_clean[,1:6])
+```
+
+### 3. Boxplot
+\
+```{r}
+mvn(travel_df_clean[,1:5], univariatePlot = "box")
+mvn(travel_df_clean[,6:10], univariatePlot = "box")
+```
+
+### 4. QQ-Plot
+Since we got error in integer variable, `system is exactly singular: U[2,2] = 0`, thus we'll do chi-square quantile plot in numeric (var 1 to 6) only.
+```{r}
+mvn(travel_df_clean[,1:6], mvnTest = "royston", multivariatePlot = "scatter", 
+    multivariateOutlierMethod="quan")
+```
+
+### 5. PAIRS PLOT
+```{r}
+my_cols <- c( "#FC4E07","#00AFBB", "#E7B800")  
+pairs(travel_df_clean[,2:7], pch = 19,  cex = 0.5,
+      col = my_cols[travel_df_clean$travel_frequency])
+```
+```{r}
+pairs.panels(travel_df_clean[,2:6], 
+             method = "pearson", # correlation method
+             hist.col = "#00AFBB",
+             density = TRUE,  # show density plots
+             ellipses = TRUE # show correlation ellipses
+             )
+```
+
+```{r}
+corPlot(travel_df_clean)
+```
+\
+
+## DISCRIMINANT ANALYSIS : Box's M Test
+```{r}
+res <- boxM(travel_df_clean[, 2:10], travel_df_clean$travel_frequency)
+res
+summary(res)
+```
+Since the dataset didn't achive the equal covariance assumption, we need to transform the dataset.
+```{r}
+# Box cox transformation
+ind <- travel_df_clean[,-1]
+ind <- log(ind)
+df_new <- cbind(travel_df_clean$travel_frequency, ind)
+head(df_new)
+```
+```{r}
+# Rename dependent variable
+df_new <- df_new %>% 
+       rename(travel_frequency = 1)
+```
+
+```{r}
+# Test Box's M again
+#res2 <- boxM(df_new[, 2:5], df_new$travel_frequency)
+#res2
+#summary(res2)
+```
+
+```{r}
+# Test Box's M again
+res3 <- boxM(df_new[, 7:10], df_new$travel_frequency)
+res3
+summary(res3)
+```
+\
+Now me make sense of our data, since we got error in eigen value when performing Box M test for variable 2 to 6 (experience rate), we will take out these value.\
+After take out all rate variables, we now have **age**, **gender**, **citizenship**, and **race** as independent variables. We see p-value of the Box M test is 0.359 which means we failed to reject null hypothesis. In other words, we achieve the equal covariance matrices assumption. We can proceed the LDA further.\
+Variable used for pca will be:
+* Dependent = travel frequency
+* Independent = age, gender, citizenship, and race.
+
+```{r}
+df_new <- df_new[, -2:-6]
+df_new$travel_frequency <- as.factor(df_new$travel_frequency)
+```
+
+## DISCRIMINANT ANALYSIS: Linear LDA
+```{r}
+lda_model <- lda(travel_frequency ~., data = df_new)
+lda_model
+```
+\
+The percentage separation achieved by each discriminant function is 73.8% and 26.2% respectively.\
+
+### Scatter plot for discriminant function
+```{r}
+lda_values <- predict(lda_model)
+plot(lda_values$x[,1], lda_values$x[,2])
+text(lda_values$x[,1], lda_values$x[,2], df_new$travel_frequency, cex = 0.7, pos = 4, col = "red")
+```
+
+```{r}
+newdata <- data.frame(type = df_new[,1], lda = lda_values$x)
+ggplot(newdata) + geom_point(aes(lda.LD1, lda.LD2, colour = type), size = 2.5)
+```
+```{r}
+# Partition Plot
+partimat(travel_frequency~.,data=df_new,method="lda") 
+```
+
+### Prediction Accuracy
+```{r}
+#df_new$travel_frequency <- as.factor(df_new$travel_frequency)
+lda_predict <- train(travel_frequency ~ ., method = "lda", data = df_new)
+confusionMatrix(df_new$travel_frequency, predict(lda_predict, df_new))
+```
+\
+We can only achieve 52.94% accuracy from our linear discriminant analysis model.\
+\
+## Quadratic Discriminant Analysis
+```{r}
+qda_model <- qda(travel_frequency ~., data = df_new)
+qda_model
+```
+
+### Accuracy for QDA
+```{r}
+qda_predict <- train(travel_frequency ~ ., method = "qda", data = df_new)
+confusionMatrix(df_new$travel_frequency, predict(qda_predict, df_new))
+```
+\
+It looks like our QDA model has better accuracy, which is 57,35% comparing to LDA model.\
+\
+
+## STEP WISE LDA
+```{r}
+# Wilk stepwise
+#formulaAll=travel_frequency~age+gender+citizenship+race
+#greedy.wilks(formulaAll,data=df_new, niveau = 0.1) 
+```
+\
+However, since our data only contains 136 rows and 5 variables, stepwise can't be conducted , the error of *Error in greedy.wilks.default(x, grouping, ...):unable to perform required calculations, perhaps not enough observations?* showed up.
+
+## WILK TEST
+
+```{r}
+dependent <- df_new$travel_frequency
+independent <- as.matrix(df_new[,-1])
+manova1<-manova(independent ~ dependent)
+wilks.test<-summary(manova1,test="Wilks")
+wilks.test
+```
+
+\
+Wilk lambda explained how well the independent variable contributes to the model. The scale ranges from 0 to 1, where 0 means total discrimination, and 1 means no discrimination. Since our Wilk is close to 1, we can't say the variables used in this model can't explained the discriminant very well.\
+

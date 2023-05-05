@@ -1,0 +1,1216 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Discriminant Analysis},
+  pdfauthor={Nadia Ahmad},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Discriminant Analysis}
+\author{Nadia Ahmad}
+\date{2023-02-18}
+
+\begin{document}
+\maketitle
+
+\hypertarget{pca-analysis-on-travel-discrimination}{%
+\section{PCA Analysis on Travel
+Discrimination}\label{pca-analysis-on-travel-discrimination}}
+
+\hfill\break
+Dataset explanation:\\
+\textbf{Dependent Variable:}\\
+- Q6\_15 : checkin experience rate\\
+- Q6\_18 : fly experience rate\\
+\textbf{Independent Variables:}\\
+\textbf{Categorical}\\
+- Q15 = Gender\\
+- Q17 = Race\\
+- Q18 = Religion\\
+\textbf{Continuos}\\
+- Q1\_ = Travel frequency\\
+\strut \\
+\#\# Library
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(readr)}
+\FunctionTok{library}\NormalTok{(readxl)}
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(corrplot)}
+\FunctionTok{library}\NormalTok{(MASS)}
+\FunctionTok{library}\NormalTok{(mvtnorm)}
+\FunctionTok{library}\NormalTok{(MVN)}
+\FunctionTok{library}\NormalTok{(psych)}
+\FunctionTok{library}\NormalTok{(ggfortify)}
+\FunctionTok{library}\NormalTok{(ggpubr)}
+\FunctionTok{library}\NormalTok{(mvoutlier)}
+\FunctionTok{library}\NormalTok{(heplots)}
+\FunctionTok{library}\NormalTok{(biotools)}
+\FunctionTok{library}\NormalTok{(emmeans)}
+\FunctionTok{library}\NormalTok{(jmv)}
+\FunctionTok{library}\NormalTok{(vegan)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{read-the-dataset}{%
+\subsection{Read the dataset}\label{read-the-dataset}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{travel }\OtherTok{\textless{}{-}} \FunctionTok{read\_excel}\NormalTok{(}\StringTok{"data\_manova.xlsx"}\NormalTok{)}
+\FunctionTok{head}\NormalTok{(travel)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 14
+##   Respon~1 UserL~2 Text ~3 Q1    Q1_   Q6_15 Q6_16 Q6_17 Q6_18 Q6_19 Q14   Q15  
+##   <chr>    <chr>   <chr>   <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+## 1 "Respon~ "User ~ "Text ~ "How~ "How~ "How~ "How~ "How~ "How~ "How~ "How~ "To ~
+## 2 "{\"Imp~ "{\"Im~ "{\"Im~ "{\"~ "{\"~ "{\"~ "{\"~ "{\"~ "{\"~ "{\"~ "{\"~ "{\"~
+## 3 "R_33DB~ "EN"    "Yes"   "<3 ~ "3"   "54"  "50"  "71"  "50"  "51"  "18-~ "Fem~
+## 4 "R_32KM~ "EN"    "Yes"   "<3 ~ "3"   "52"  "52"  "51"  "53"  "52"  "35-~ "Mal~
+## 5 "R_1K2T~ "EN"    "Yes"   "4-6~ "5"    <NA>  <NA>  <NA>  <NA>  <NA> "65+~ "Mal~
+## 6 "R_2zBV~ "EN"    "Yes"   "<3 ~ "3"   "51"  "53"  "54"  "52"  "57"  "25-~ "Fem~
+## # ... with 2 more variables: Q17 <chr>, Q18 <chr>, and abbreviated variable
+## #   names 1: ResponseId, 2: UserLanguage, 3: `Text / Graphic`
+\end{verbatim}
+
+Dataset contains 231 rows and 14 columns which is still messy. Thus,
+we'll conduct some data preprocessing steps.\\
+\strut \\
+\#\# DATA PREPROCESSING
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# First, drop two first rows. Next, filter only data that has 100 in progress}
+\NormalTok{travel }\OtherTok{\textless{}{-}}\NormalTok{ travel }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{slice}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+
+\CommentTok{\# Select used columns}
+\NormalTok{travel\_df }\OtherTok{\textless{}{-}}\NormalTok{ travel[}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{14}\NormalTok{)]}
+\end{Highlighting}
+\end{Shaded}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# CHECK MISSING VALUE{-}{-}{-}{-}}
+\CommentTok{\# Count the missing values by column wise}
+\FunctionTok{print}\NormalTok{(}\StringTok{"Count of missing values by column wise"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Count of missing values by column wise"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sapply}\NormalTok{(travel\_df, }\ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{sum}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(x)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Q1_ Q6_15 Q6_18   Q15   Q17   Q18 
+##    30    72    75    74    72    78
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Missing value imputation}
+\CommentTok{\# Since our data contains 46 missing value, let\textquotesingle{}s impute with mode}
+\CommentTok{\# Function to see mode}
+\NormalTok{calc\_mode }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x)\{}
+  
+  \CommentTok{\# List the distinct / unique values}
+\NormalTok{  distinct\_values }\OtherTok{\textless{}{-}} \FunctionTok{unique}\NormalTok{(}\FunctionTok{na.omit}\NormalTok{(x))}
+  
+  \CommentTok{\# Count the occurrence of each distinct value}
+\NormalTok{  distinct\_tabulate }\OtherTok{\textless{}{-}} \FunctionTok{tabulate}\NormalTok{(}\FunctionTok{match}\NormalTok{(x, distinct\_values))}
+  
+  \CommentTok{\# Return the value with the highest occurrence}
+\NormalTok{  distinct\_values[}\FunctionTok{which.max}\NormalTok{(distinct\_tabulate)]}
+\NormalTok{\}}
+
+\CommentTok{\# Impute missing value{-}{-}{-}{-}}
+\NormalTok{travel\_df }\OtherTok{\textless{}{-}}\NormalTok{ travel\_df }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{everything}\NormalTok{(), }\SpecialCharTok{\textasciitilde{}}\FunctionTok{replace\_na}\NormalTok{(.x, }\FunctionTok{calc\_mode}\NormalTok{(.x))))}
+\end{Highlighting}
+\end{Shaded}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Rename column name}
+\NormalTok{travel\_df\_clean }\OtherTok{\textless{}{-}}\NormalTok{ travel\_df }\SpecialCharTok{\%\textgreater{}\%} 
+       \FunctionTok{rename}\NormalTok{(}\AttributeTok{travel\_frequency =} \DecValTok{1}\NormalTok{, }\AttributeTok{checkin\_exp =} \DecValTok{2}\NormalTok{,}
+              \AttributeTok{fly\_exp =} \DecValTok{3}\NormalTok{, }\AttributeTok{gender =} \DecValTok{4}\NormalTok{, }\AttributeTok{race=}\DecValTok{5}\NormalTok{,}
+              \AttributeTok{religion =} \DecValTok{6}\NormalTok{)}
+\FunctionTok{head}\NormalTok{(travel\_df\_clean)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 6
+##   travel_frequency checkin_exp fly_exp gender race                      religion
+##   <chr>            <chr>       <chr>   <chr>  <chr>                     <chr>   
+## 1 3                54          50      Female Asian                     Islam   
+## 2 3                52          53      Male   Black of African American Islam   
+## 3 5                50          50      Male   Asian                     Islam   
+## 4 3                51          52      Female Asian                     Islam   
+## 5 3                48          100     Male   Asian                     Islam   
+## 6 3                50          50      Male   White                     Atheism~
+\end{verbatim}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# CONVERT DATA TYPE{-}{-}{-}{-}}
+\CommentTok{\# Convert all variables into integer}
+\CommentTok{\# Convert column 2 to 6 to numeric}
+\NormalTok{travel\_df\_clean[,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(travel\_df\_clean[,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{], as.numeric)}
+\NormalTok{travel\_df\_clean[,}\DecValTok{4}\SpecialCharTok{:}\DecValTok{6}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(travel\_df\_clean[,}\DecValTok{4}\SpecialCharTok{:}\DecValTok{6}\NormalTok{], as.factor)}
+\FunctionTok{head}\NormalTok{(travel\_df\_clean)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 6
+##   travel_frequency checkin_exp fly_exp gender race                      religion
+##              <dbl>       <dbl>   <dbl> <fct>  <fct>                     <fct>   
+## 1                3          54      50 Female Asian                     Islam   
+## 2                3          52      53 Male   Black of African American Islam   
+## 3                5          50      50 Male   Asian                     Islam   
+## 4                3          51      52 Female Asian                     Islam   
+## 5                3          48     100 Male   Asian                     Islam   
+## 6                3          50      50 Male   White                     Atheism~
+\end{verbatim}
+
+\hfill\break
+\#\# 1. INTERACTION PLOT \#\#\#\# Checkin Experience Rate \#\#\#\#\#
+Gender vs Race
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{interaction.plot}\NormalTok{(}
+  \AttributeTok{x.factor =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{race,}
+  \AttributeTok{trace.factor =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{gender,}
+  \AttributeTok{response =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{checkin\_exp,}
+  \AttributeTok{type=}\StringTok{"b"}\NormalTok{, }\AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{),}
+  \AttributeTok{ylab =} \StringTok{"Checkin Experience Rate"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Races"}\NormalTok{,}
+  \AttributeTok{trace.label =} \StringTok{"Gender"}\NormalTok{,}
+  \AttributeTok{main=}\StringTok{"Interaction Plot"}\NormalTok{,}
+  \AttributeTok{leg.bty=}\StringTok{"o"}\NormalTok{, }\AttributeTok{leg.bg=}\StringTok{"beige"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{,}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Manova_files/figure-latex/unnamed-chunk-7-1.pdf}\\
+\#\#\#\#\# Gender vs Religion
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{interaction.plot}\NormalTok{(}
+  \AttributeTok{x.factor =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{religion,}
+  \AttributeTok{trace.factor =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{gender,}
+  \AttributeTok{response =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{checkin\_exp,}
+  \AttributeTok{type=}\StringTok{"b"}\NormalTok{, }\AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{),}
+  \AttributeTok{ylab =} \StringTok{"Checkin Experience Rate"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Religion"}\NormalTok{,}
+  \AttributeTok{trace.label =} \StringTok{"Gender"}\NormalTok{,}
+  \AttributeTok{main=}\StringTok{"Interaction Plot"}\NormalTok{,}
+  \AttributeTok{leg.bty=}\StringTok{"o"}\NormalTok{, }\AttributeTok{leg.bg=}\StringTok{"beige"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{,}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Manova_files/figure-latex/unnamed-chunk-8-1.pdf}\\
+\#\#\#\#\# Race vs Religion
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{interaction.plot}\NormalTok{(}
+  \AttributeTok{x.factor =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{religion,}
+  \AttributeTok{trace.factor =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{race,}
+  \AttributeTok{response =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{checkin\_exp,}
+  \AttributeTok{type=}\StringTok{"b"}\NormalTok{, }\AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{8}\NormalTok{),}
+  \AttributeTok{ylab =} \StringTok{"Checkin Experience Rate"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Religion"}\NormalTok{,}
+  \AttributeTok{trace.label =} \StringTok{"Race"}\NormalTok{,}
+  \AttributeTok{main=}\StringTok{"Interaction Plot"}\NormalTok{,}
+  \AttributeTok{leg.bty=}\StringTok{"o"}\NormalTok{, }\AttributeTok{leg.bg=}\StringTok{"beige"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Manova_files/figure-latex/unnamed-chunk-9-1.pdf}\\
+\#\#\#\# fly Claim Experience Rate \#\#\#\#\# Gender vs Race
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{interaction.plot}\NormalTok{(}
+  \AttributeTok{x.factor =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{race,}
+  \AttributeTok{trace.factor =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{gender,}
+  \AttributeTok{response =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{fly\_exp,}
+  \AttributeTok{type=}\StringTok{"b"}\NormalTok{, }\AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{),}
+  \AttributeTok{ylab =} \StringTok{"fly Claim Experience Rate"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Races"}\NormalTok{,}
+  \AttributeTok{trace.label =} \StringTok{"Gender"}\NormalTok{,}
+  \AttributeTok{main=}\StringTok{"Interaction Plot"}\NormalTok{,}
+  \AttributeTok{leg.bty=}\StringTok{"o"}\NormalTok{, }\AttributeTok{leg.bg=}\StringTok{"beige"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{,}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Manova_files/figure-latex/unnamed-chunk-10-1.pdf}\\
+\#\#\#\#\# Gender vs Religion
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{interaction.plot}\NormalTok{(}
+  \AttributeTok{x.factor =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{religion,}
+  \AttributeTok{trace.factor =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{gender,}
+  \AttributeTok{response =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{fly\_exp,}
+  \AttributeTok{type=}\StringTok{"b"}\NormalTok{, }\AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{),}
+  \AttributeTok{ylab =} \StringTok{"fly Claim Experience Rate"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Religion"}\NormalTok{,}
+  \AttributeTok{trace.label =} \StringTok{"Gender"}\NormalTok{,}
+  \AttributeTok{main=}\StringTok{"Interaction Plot"}\NormalTok{,}
+  \AttributeTok{leg.bty=}\StringTok{"o"}\NormalTok{, }\AttributeTok{leg.bg=}\StringTok{"beige"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{,}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Manova_files/figure-latex/unnamed-chunk-11-1.pdf}\\
+\#\#\#\#\# Race vs Religion
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{interaction.plot}\NormalTok{(}
+  \AttributeTok{x.factor =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{religion,}
+  \AttributeTok{trace.factor =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{race,}
+  \AttributeTok{response =}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{fly\_exp,}
+  \AttributeTok{type=}\StringTok{"b"}\NormalTok{, }\AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{8}\NormalTok{),}
+  \AttributeTok{ylab =} \StringTok{"Checkin Experience Rate"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Religion"}\NormalTok{,}
+  \AttributeTok{trace.label =} \StringTok{"Race"}\NormalTok{,}
+  \AttributeTok{main=}\StringTok{"Interaction Plot"}\NormalTok{,}
+  \AttributeTok{leg.bty=}\StringTok{"o"}\NormalTok{, }\AttributeTok{leg.bg=}\StringTok{"beige"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Manova_files/figure-latex/unnamed-chunk-12-1.pdf}\\
+\#\# 2. MANOVA \#\#\# ANOVA WITH INTERACTION : Gender and Religion as
+Factors \#\#\#\# Dependent : checkin experience
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{aov\_1 }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(checkin\_exp }\SpecialCharTok{\textasciitilde{}}\NormalTok{ gender }\SpecialCharTok{*}\NormalTok{ religion, }\AttributeTok{data =}\NormalTok{ travel\_df\_clean)}
+\FunctionTok{summary}\NormalTok{(aov\_1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                  Df Sum Sq Mean Sq F value Pr(>F)  
+## gender            3    706   235.3   0.844 0.4712  
+## religion         10   4799   479.9   1.721 0.0777 .
+## gender:religion   7   3658   522.5   1.874 0.0752 .
+## Residuals       208  57983   278.8                 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hfill\break
+\#\#\#\# Dependent : fly claim experience
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{aov\_2 }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(fly\_exp }\SpecialCharTok{\textasciitilde{}}\NormalTok{ gender }\SpecialCharTok{*}\NormalTok{ religion, }\AttributeTok{data =}\NormalTok{ travel\_df\_clean)}
+\FunctionTok{summary}\NormalTok{(aov\_2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                  Df Sum Sq Mean Sq F value Pr(>F)  
+## gender            3    238    79.3   0.339 0.7972  
+## religion         10   4296   429.6   1.837 0.0560 .
+## gender:religion   7   3626   518.1   2.215 0.0343 *
+## Residuals       208  48638   233.8                 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hfill\break
+\#\#\# ANOVA WITH INTERACTION : Gender and Race as Factors \#\#\#\#
+Dependent : checkin experience
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{aov\_1\_ }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(checkin\_exp }\SpecialCharTok{\textasciitilde{}}\NormalTok{ gender }\SpecialCharTok{*}\NormalTok{ race, }\AttributeTok{data =}\NormalTok{ travel\_df\_clean)}
+\FunctionTok{summary}\NormalTok{(aov\_1\_)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              Df Sum Sq Mean Sq F value   Pr(>F)    
+## gender        3    706   235.3   0.890 0.447165    
+## race          7   7724  1103.5   4.174 0.000251 ***
+## gender:race   7   2930   418.6   1.583 0.141709    
+## Residuals   211  55784   264.4                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hfill\break
+\#\#\#\# Dependent : fly claim experience
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{aov\_2\_ }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(fly\_exp }\SpecialCharTok{\textasciitilde{}}\NormalTok{ gender }\SpecialCharTok{*}\NormalTok{ race, }\AttributeTok{data =}\NormalTok{ travel\_df\_clean)}
+\FunctionTok{summary}\NormalTok{(aov\_2\_)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              Df Sum Sq Mean Sq F value  Pr(>F)   
+## gender        3    238    79.3   0.337 0.79859   
+## race          7   4694   670.6   2.852 0.00731 **
+## gender:race   7   2244   320.6   1.363 0.22235   
+## Residuals   211  49622   235.2                   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hfill\break
+\#\#\# ANOVA WITH INTERACTION : Religion and Race as Factors \#\#\#\#
+Dependent : checkin experience
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{aov\_1\_1 }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(checkin\_exp }\SpecialCharTok{\textasciitilde{}}\NormalTok{ religion }\SpecialCharTok{*}\NormalTok{ race, }\AttributeTok{data =}\NormalTok{ travel\_df\_clean)}
+\FunctionTok{summary}\NormalTok{(aov\_1\_1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                Df Sum Sq Mean Sq F value  Pr(>F)   
+## religion       10   5242   524.2   1.994 0.03572 * 
+## race            7   5177   739.6   2.814 0.00816 **
+## religion:race  14   4945   353.2   1.344 0.18461   
+## Residuals     197  51781   262.8                   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hfill\break
+\#\#\#\# Dependent : fly claim experience
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{aov\_1\_2 }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(fly\_exp }\SpecialCharTok{\textasciitilde{}}\NormalTok{ religion }\SpecialCharTok{*}\NormalTok{ race, }\AttributeTok{data =}\NormalTok{ travel\_df\_clean)}
+\FunctionTok{summary}\NormalTok{(aov\_1\_2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                Df Sum Sq Mean Sq F value  Pr(>F)   
+## religion       10   4102   410.2   1.911 0.04556 * 
+## race            7   4527   646.7   3.013 0.00498 **
+## religion:race  14   5888   420.5   1.959 0.02267 * 
+## Residuals     197  42282   214.6                   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hfill\break
+\#\#\# TWO WAY MANOVA WITH INTERACTION : Gender and Race as Factors
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{manova1 }\OtherTok{\textless{}{-}} \FunctionTok{manova}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(checkin\_exp, fly\_exp) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ gender}\SpecialCharTok{*}\NormalTok{race, }\AttributeTok{data=}\NormalTok{travel\_df\_clean)}
+\FunctionTok{summary}\NormalTok{(manova1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              Df   Pillai approx F num Df den Df   Pr(>F)   
+## gender        3 0.012843  0.45455      6    422 0.841726   
+## race          7 0.143232  2.32523     14    422 0.004276 **
+## gender:race   7 0.067957  1.06023     14    422 0.392356   
+## Residuals   211                                            
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary.aov}\NormalTok{(manova1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  Response checkin_exp :
+##              Df Sum Sq Mean Sq F value   Pr(>F)    
+## gender        3    706  235.29  0.8900 0.447165    
+## race          7   7724 1103.46  4.1737 0.000251 ***
+## gender:race   7   2930  418.63  1.5835 0.141709    
+## Residuals   211  55784  264.38                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+##  Response fly_exp :
+##              Df Sum Sq Mean Sq F value   Pr(>F)   
+## gender        3    238   79.26  0.3370 0.798590   
+## race          7   4694  670.63  2.8516 0.007308 **
+## gender:race   7   2244  320.62  1.3633 0.222354   
+## Residuals   211  49622  235.17                    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hfill\break
+\#\#\# TWO WAY MANOVA WITH INTERACTION : Gender and Religion as Factors
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{manova2 }\OtherTok{\textless{}{-}} \FunctionTok{manova}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(checkin\_exp, fly\_exp) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ gender}\SpecialCharTok{*}\NormalTok{religion, }\AttributeTok{data=}\NormalTok{travel\_df\_clean)}
+\FunctionTok{summary}\NormalTok{(manova2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                  Df   Pillai approx F num Df den Df Pr(>F)
+## gender            3 0.012388  0.43212      6    416 0.8575
+## religion         10 0.126620  1.40585     20    416 0.1145
+## gender:religion   7 0.089753  1.39613     14    416 0.1511
+## Residuals       208
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary.aov}\NormalTok{(manova2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  Response checkin_exp :
+##                  Df Sum Sq Mean Sq F value  Pr(>F)  
+## gender            3    706  235.29  0.8441 0.47116  
+## religion         10   4799  479.87  1.7214 0.07767 .
+## gender:religion   7   3658  522.53  1.8745 0.07520 .
+## Residuals       208  57983  278.76                  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+##  Response fly_exp :
+##                  Df Sum Sq Mean Sq F value  Pr(>F)  
+## gender            3    238   79.26  0.3389 0.79719  
+## religion         10   4296  429.60  1.8372 0.05599 .
+## gender:religion   7   3626  518.06  2.2155 0.03430 *
+## Residuals       208  48638  233.84                  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hfill\break
+\#\#\# TWO WAY MANOVA WITH INTERACTION : Gender and Religion as Factors
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{manova3 }\OtherTok{\textless{}{-}} \FunctionTok{manova}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(checkin\_exp, fly\_exp) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ race}\SpecialCharTok{*}\NormalTok{religion, }\AttributeTok{data=}\NormalTok{travel\_df\_clean)}
+\FunctionTok{summary}\NormalTok{(manova3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                Df  Pillai approx F num Df den Df   Pr(>F)   
+## race            7 0.15825   2.4181     14    394 0.002913 **
+## religion       10 0.11246   1.1738     20    394 0.273406   
+## race:religion  14 0.15838   1.2101     28    394 0.215616   
+## Residuals     197                                           
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary.aov}\NormalTok{(manova3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  Response checkin_exp :
+##                Df Sum Sq Mean Sq F value    Pr(>F)    
+## race            7   7866 1123.65  4.2749 0.0002017 ***
+## religion       10   2554  255.35  0.9715 0.4695651    
+## race:religion  14   4945  353.22  1.3438 0.1846120    
+## Residuals     197  51781  262.85                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+##  Response fly_exp :
+##                Df Sum Sq Mean Sq F value   Pr(>F)   
+## race            7   4488  641.10  2.9870 0.005313 **
+## religion       10   4141  414.12  1.9295 0.043194 * 
+## race:religion  14   5888  420.54  1.9594 0.022670 * 
+## Residuals     197  42282  214.63                    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hfill\break
+\#\#\# ASSUMPTION TEST : PILLAI
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(manova3,}
+        \AttributeTok{test =} \StringTok{"Pillai"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                Df  Pillai approx F num Df den Df   Pr(>F)   
+## race            7 0.15825   2.4181     14    394 0.002913 **
+## religion       10 0.11246   1.1738     20    394 0.273406   
+## race:religion  14 0.15838   1.2101     28    394 0.215616   
+## Residuals     197                                           
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hfill\break
+\#\#\# ASSUMPTION TEST : WILKS
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(manova3,}
+        \AttributeTok{test =} \StringTok{"Wilks"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                Df   Wilks approx F num Df den Df   Pr(>F)   
+## race            7 0.84308   2.4947     14    392 0.002088 **
+## religion       10 0.88951   1.1816     20    392 0.266324   
+## race:religion  14 0.84493   1.2306     28    392 0.197405   
+## Residuals     197                                           
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hfill\break
+\#\#\# ASSUMPTION TEST : HOTELLING-LAWLEY
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(manova3,}
+        \AttributeTok{test =} \StringTok{"Hotelling{-}Lawley"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                Df Hotelling-Lawley approx F num Df den Df   Pr(>F)   
+## race            7          0.18456   2.5707     14    390 0.001496 **
+## religion       10          0.12199   1.1894     20    390 0.259486   
+## race:religion  14          0.17960   1.2508     28    390 0.180543   
+## Residuals     197                                                    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hfill\break
+\#\#\# ASSUMPTION TEST : ROY
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(manova3,}
+        \AttributeTok{test =} \StringTok{"Roy"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                Df      Roy approx F num Df den Df    Pr(>F)    
+## race            7 0.175617   4.9424      7    197 3.618e-05 ***
+## religion       10 0.099669   1.9635     10    197   0.03911 *  
+## race:religion  14 0.154187   2.1696     14    197   0.01015 *  
+## Residuals     197                                              
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+Assume now, we'll go with religion and race as factors based on MANOVA
+result.\\
+\strut \\
+\#\# 3. CONTRAST \#\#\# Univariate Contrast
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{M }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(checkin\_exp, fly\_exp) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ race }\SpecialCharTok{+}\NormalTok{ religion, }\AttributeTok{data =}\NormalTok{ travel\_df\_clean)}
+\FunctionTok{anova}\NormalTok{(M)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+##              Df  Pillai approx F num Df den Df    Pr(>F)    
+## (Intercept)   1 0.94396  1768.60      2    210 < 2.2e-16 ***
+## race          7 0.14232     2.31     14    422  0.004579 ** 
+## religion     10 0.10105     1.12     20    422  0.322227    
+## Residuals   211                                             
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mvpaircomp}\NormalTok{(M, }\AttributeTok{factor1 =} \StringTok{"race"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##             Multivariate Pairwise Comparisons
+## 
+##                                                                Pillai approx F
+## American Indian or Alaska Native - Asian                     0.000217   0.0228
+## American Indian or Alaska Native - Black of African American 0.000377   0.0396
+## American Indian or Alaska Native - Hispanic or Latino        0.003111   0.3277
+## American Indian or Alaska Native - Multiracial               0.005985   0.6322
+## American Indian or Alaska Native - Prefer Not to Disclose    0.005584   0.5896
+## American Indian or Alaska Native - Some Other Race           0.000023   0.0024
+## American Indian or Alaska Native - White                     0.002961   0.3118
+## Asian - Black of African American                            0.004251   0.4482
+## Asian - Hispanic or Latino                                   0.017110   1.8278
+## Asian - Multiracial                                          0.049315   5.4467
+## Asian - Prefer Not to Disclose                               0.024622   2.6506
+## Asian - Some Other Race                                      0.000663   0.0696
+## Asian - White                                                0.068436   7.7137
+## Black of African American - Hispanic or Latino               0.005302   0.5597
+## Black of African American - Multiracial                      0.016090   1.7170
+## Black of African American - Prefer Not to Disclose           0.025063   2.6993
+## Black of African American - Some Other Race                  0.001841   0.1937
+## Black of African American - White                            0.009006   0.9542
+## Hispanic or Latino - Multiracial                             0.001634   0.1718
+## Hispanic or Latino - Prefer Not to Disclose                  0.039136   4.2767
+## Hispanic or Latino - Some Other Race                         0.010743   1.1402
+## Hispanic or Latino - White                                   0.001062   0.1116
+## Multiracial - Prefer Not to Disclose                         0.057569   6.4139
+## Multiracial - Some Other Race                                0.024045   2.5870
+## Multiracial - White                                          0.008894   0.9422
+## Prefer Not to Disclose - Some Other Race                     0.014456   1.5402
+## Prefer Not to Disclose - White                               0.052484   5.8161
+## Some Other Race - White                                      0.015793   1.6849
+##                                                              num DF den DF
+## American Indian or Alaska Native - Asian                          2    210
+## American Indian or Alaska Native - Black of African American      2    210
+## American Indian or Alaska Native - Hispanic or Latino             2    210
+## American Indian or Alaska Native - Multiracial                    2    210
+## American Indian or Alaska Native - Prefer Not to Disclose         2    210
+## American Indian or Alaska Native - Some Other Race                2    210
+## American Indian or Alaska Native - White                          2    210
+## Asian - Black of African American                                 2    210
+## Asian - Hispanic or Latino                                        2    210
+## Asian - Multiracial                                               2    210
+## Asian - Prefer Not to Disclose                                    2    210
+## Asian - Some Other Race                                           2    210
+## Asian - White                                                     2    210
+## Black of African American - Hispanic or Latino                    2    210
+## Black of African American - Multiracial                           2    210
+## Black of African American - Prefer Not to Disclose                2    210
+## Black of African American - Some Other Race                       2    210
+## Black of African American - White                                 2    210
+## Hispanic or Latino - Multiracial                                  2    210
+## Hispanic or Latino - Prefer Not to Disclose                       2    210
+## Hispanic or Latino - Some Other Race                              2    210
+## Hispanic or Latino - White                                        2    210
+## Multiracial - Prefer Not to Disclose                              2    210
+## Multiracial - Some Other Race                                     2    210
+## Multiracial - White                                               2    210
+## Prefer Not to Disclose - Some Other Race                          2    210
+## Prefer Not to Disclose - White                                    2    210
+## Some Other Race - White                                           2    210
+##                                                                 Pr(>F)    
+## American Indian or Alaska Native - Asian                     0.9774660    
+## American Indian or Alaska Native - Black of African American 0.9611607    
+## American Indian or Alaska Native - Hispanic or Latino        0.7209785    
+## American Indian or Alaska Native - Multiracial               0.5324069    
+## American Indian or Alaska Native - Prefer Not to Disclose    0.5554651    
+## American Indian or Alaska Native - Some Other Race           0.9975944    
+## American Indian or Alaska Native - White                     0.7324412    
+## Asian - Black of African American                            0.6393624    
+## Asian - Hispanic or Latino                                   0.1633143    
+## Asian - Multiracial                                          0.0049415 ** 
+## Asian - Prefer Not to Disclose                               0.0729733 .  
+## Asian - Some Other Race                                      0.9327803    
+## Asian - White                                                0.0005852 ***
+## Black of African American - Hispanic or Latino               0.5722235    
+## Black of African American - Multiracial                      0.1821075    
+## Black of African American - Prefer Not to Disclose           0.0695854 .  
+## Black of African American - Some Other Race                  0.8240694    
+## Black of African American - White                            0.3867768    
+## Hispanic or Latino - Multiracial                             0.8422401    
+## Hispanic or Latino - Prefer Not to Disclose                  0.0151182 *  
+## Hispanic or Latino - Some Other Race                         0.3217224    
+## Hispanic or Latino - White                                   0.8944385    
+## Multiracial - Prefer Not to Disclose                         0.0019780 ** 
+## Multiracial - Some Other Race                                0.0776436 .  
+## Multiracial - White                                          0.3913989    
+## Prefer Not to Disclose - Some Other Race                     0.2167540    
+## Prefer Not to Disclose - White                               0.0034799 ** 
+## Some Other Race - White                                      0.1879651    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## With none p-value adjustment for multiple comparisons
+\end{verbatim}
+
+\hfill\break
+\#\#\# Multivariate Contrast
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{MOats.lm }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(checkin\_exp, fly\_exp) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ race }\SpecialCharTok{+}\NormalTok{ religion, }\AttributeTok{data =}\NormalTok{ travel\_df\_clean)}
+\NormalTok{MOats.emm }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(MOats.lm, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ race}\SpecialCharTok{|}\NormalTok{ rep.meas)}
+\FunctionTok{mvcontrast}\NormalTok{(MOats.emm, }\StringTok{"consec"}\NormalTok{, }\AttributeTok{show.ests =} \ConstantTok{TRUE}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $estimates
+## contrast = Asian - American Indian or Alaska Native:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp     3.34 17.02 211   0.196  0.8445
+##  fly_exp         4.14 15.68 211   0.264  0.7920
+## 
+## contrast = Black of African American - Asian:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp     3.37  7.13 211   0.473  0.6369
+##  fly_exp        -2.54  6.57 211  -0.387  0.6991
+## 
+## contrast = Hispanic or Latino - Black of African American:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp    10.89  9.76 211   1.115  0.2660
+##  fly_exp        12.05  9.00 211   1.340  0.1817
+## 
+## contrast = Multiracial - Hispanic or Latino:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp     4.46  9.69 211   0.460  0.6463
+##  fly_exp         3.23  8.93 211   0.362  0.7177
+## 
+## contrast = Prefer Not to Disclose - Multiracial:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp   -45.43 12.15 211  -3.738  0.0002
+##  fly_exp       -42.71 11.20 211  -3.814  0.0002
+## 
+## contrast = Some Other Race - Prefer Not to Disclose:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp    27.26 12.32 211   2.213  0.0279
+##  fly_exp        28.16 11.35 211   2.481  0.0139
+## 
+## contrast = White - Some Other Race:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp     7.29  7.94 211   0.919  0.3593
+##  fly_exp         9.09  7.32 211   1.243  0.2154
+## 
+## Results are averaged over the levels of: religion 
+## 
+## $tests
+##  contrast                                       T.square df1 df2 F.ratio
+##  Asian - American Indian or Alaska Native          0.075   2 210   0.037
+##  Black of African American - Asian                 0.750   2 210   0.373
+##  Hispanic or Latino - Black of African American    2.053   2 210   1.022
+##  Multiracial - Hispanic or Latino                  0.234   2 210   0.116
+##  Prefer Not to Disclose - Multiracial             18.947   2 210   9.429
+##  Some Other Race - Prefer Not to Disclose          7.392   2 210   3.679
+##  White - Some Other Race                           1.658   2 210   0.825
+##  p.value
+##   1.0000
+##   0.9997
+##   0.9569
+##   1.0000
+##   0.0008
+##   0.1738
+##   0.9827
+## 
+## P value adjustment: sidak
+\end{verbatim}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{MOats.lm2 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(checkin\_exp, fly\_exp) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ race }\SpecialCharTok{+}\NormalTok{ religion, }\AttributeTok{data =}\NormalTok{ travel\_df\_clean)}
+\NormalTok{MOats.emm2 }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(MOats.lm, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ religion}\SpecialCharTok{|}\NormalTok{ rep.meas)}
+\FunctionTok{mvcontrast}\NormalTok{(MOats.emm2, }\StringTok{"consec"}\NormalTok{, }\AttributeTok{show.ests =} \ConstantTok{TRUE}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $estimates
+## contrast = (Atheism/Agnosticism) - African Diaspora Religion:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp     4.71 14.02 211   0.336  0.7373
+##  fly_exp       -13.40 12.92 211  -1.037  0.3010
+## 
+## contrast = Buddhism - (Atheism/Agnosticism):
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp     1.80 12.66 211   0.142  0.8870
+##  fly_exp       -11.52 11.67 211  -0.987  0.3248
+## 
+## contrast = Christianity - Buddhism:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp    -5.29 12.41 211  -0.426  0.6705
+##  fly_exp         7.11 11.43 211   0.622  0.5347
+## 
+## contrast = Hinduism - Christianity:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp    -5.21 12.41 211  -0.420  0.6747
+##  fly_exp         3.89 11.43 211   0.340  0.7340
+## 
+## contrast = Islam - Hinduism:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp     3.99 12.12 211   0.329  0.7427
+##  fly_exp        -1.49 11.17 211  -0.133  0.8943
+## 
+## contrast = Judaism - Islam:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp    16.87 10.38 211   1.625  0.1057
+##  fly_exp        20.58  9.57 211   2.150  0.0327
+## 
+## contrast = (Judaism,Atheism/Agnosticism) - Judaism:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp   -14.33 18.93 211  -0.757  0.4499
+##  fly_exp       -25.00 17.45 211  -1.433  0.1534
+## 
+## contrast = Other - (Judaism,Atheism/Agnosticism):
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp    -1.20 17.77 211  -0.067  0.9463
+##  fly_exp         2.57 16.37 211   0.157  0.8756
+## 
+## contrast = Prefer Not to Disclose - Other:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp    14.30  8.90 211   1.606  0.1098
+##  fly_exp        18.60  8.20 211   2.267  0.0244
+## 
+## contrast = Sikhism - Prefer Not to Disclose:
+##  rep.meas    estimate    SE  df t.ratio p.value
+##  checkin_exp   -15.27 13.13 211  -1.163  0.2460
+##  fly_exp       -23.88 12.09 211  -1.974  0.0497
+## 
+## Results are averaged over the levels of: race 
+## 
+## $tests
+##  contrast                                          T.square df1 df2 F.ratio
+##  (Atheism/Agnosticism) - African Diaspora Religion    2.069   2 210   1.029
+##  Buddhism - (Atheism/Agnosticism)                     1.526   2 210   0.760
+##  Christianity - Buddhism                              1.123   2 210   0.559
+##  Hinduism - Christianity                              0.587   2 210   0.292
+##  Islam - Hinduism                                     0.228   2 210   0.114
+##  Judaism - Islam                                      5.012   2 210   2.494
+##  (Judaism,Atheism/Agnosticism) - Judaism              2.055   2 210   1.022
+##  Other - (Judaism,Atheism/Agnosticism)                0.053   2 210   0.027
+##  Prefer Not to Disclose - Other                       5.422   2 210   2.698
+##  Sikhism - Prefer Not to Disclose                     3.934   2 210   1.958
+##  p.value
+##   0.9883
+##   0.9982
+##   0.9998
+##   1.0000
+##   1.0000
+##   0.5888
+##   0.9887
+##   1.0000
+##   0.5143
+##   0.7881
+## 
+## P value adjustment: sidak
+\end{verbatim}
+
+\hypertarget{mancova}{%
+\subsection{4. MANCOVA}\label{mancova}}
+
+Now we add travel\_frequency as covariates.\\
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results }\OtherTok{\textless{}{-}} \FunctionTok{mancova}\NormalTok{(}\AttributeTok{data =}\NormalTok{ travel\_df\_clean,}
+        \AttributeTok{deps =} \FunctionTok{vars}\NormalTok{(checkin\_exp, fly\_exp),}
+        \AttributeTok{factors =} \FunctionTok{vars}\NormalTok{(race, religion),}
+        \AttributeTok{covs =}\NormalTok{ travel\_frequency,}
+        \AttributeTok{multivar =} \FunctionTok{list}\NormalTok{(}\StringTok{"pillai"}\NormalTok{, }\StringTok{"wilks"}\NormalTok{, }\StringTok{"hotel"}\NormalTok{, }\StringTok{"roy"}\NormalTok{), }\AttributeTok{boxM =}\NormalTok{ T,}
+        \AttributeTok{shapiro =}\NormalTok{ T, }\AttributeTok{qqPlot =}\NormalTok{ T)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{multivariate-mancova}{%
+\subsubsection{MULTIVARIATE MANCOVA}\label{multivariate-mancova}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results}\SpecialCharTok{$}\NormalTok{multivar}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Multivariate Tests                                                                              
+##  ─────────────────────────────────────────────────────────────────────────────────────────────── 
+##                                              value         F           df1    df2    p           
+##  ─────────────────────────────────────────────────────────────────────────────────────────────── 
+##    race                Pillai's Trace        0.15986903    2.432616     14    392    0.0027387   
+##                        Wilks' Lambda          0.8414697    2.510936     14    390    0.0019474   
+##                        Hotelling's Trace     0.18680589    2.588596     14    388    0.0013842   
+##                        Roy's Largest Root    0.17786080    4.980102      7    196    0.0000330   
+##                                                                                                  
+##    religion            Pillai's Trace        0.11326700    1.176655     20    392    0.2708282   
+##                        Wilks' Lambda          0.8887351    1.184662     20    390    0.2636560   
+##                        Hotelling's Trace     0.12294182    1.192536     20    388    0.2567352   
+##                        Roy's Largest Root    0.10053336    1.970454     10    196    0.0383495   
+##                                                                                                  
+##    race:religion       Pillai's Trace        0.15137166    1.146365     28    392    0.2801717   
+##                        Wilks' Lambda          0.8516551    1.164398     28    390    0.2608121   
+##                        Hotelling's Trace     0.17063032    1.182224     28    388    0.2425808   
+##                        Roy's Largest Root    0.14634566    2.048839     14    196    0.0161958   
+##                                                                                                  
+##    travel_frequency    Pillai's Trace        0.02296571    2.291789      2    195    0.1038021   
+##                        Wilks' Lambda          0.9770343    2.291789      2    195    0.1038021   
+##                        Hotelling's Trace     0.02350553    2.291789      2    195    0.1038021   
+##                        Roy's Largest Root    0.02350553    2.291789      2    195    0.1038021   
+##  ───────────────────────────────────────────────────────────────────────────────────────────────
+\end{verbatim}
+
+\hfill\break
+\#\#\#\# UNIVARIATE MANCOVA
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results}\SpecialCharTok{$}\NormalTok{univar}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Univariate Tests                                                                                             
+##  ──────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+##                        Dependent Variable    Sum of Squares    df     Mean Square    F            p           
+##  ──────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+##    race                checkin_exp                7865.5333      7      1123.6476    4.3018270    0.0001889   
+##                        fly_exp                    4487.6795      7       641.0971    2.9919084    0.0052568   
+##    religion            checkin_exp                2553.5320     10       255.3532    0.9776066    0.4642214   
+##                        fly_exp                    4141.2498     10       414.1250    1.9326621    0.0428314   
+##    race:religion       checkin_exp                4483.6256     14       320.2590    1.2260950    0.2587589   
+##                        fly_exp                    5617.5024     14       401.2502    1.8725772    0.0313073   
+##    travel_frequency    checkin_exp                1046.5956      1      1046.5956    4.0068373    0.0466951   
+##                        fly_exp                     553.5446      1       553.5446    2.5833137    0.1096051   
+##    Residuals           checkin_exp               51195.6742    196       261.2024                             
+##                        fly_exp                   41998.2857    196       214.2770                             
+##  ────────────────────────────────────────────────────────────────────────────────────────────────────────────
+\end{verbatim}
+
+\hfill\break
+\#\# 5. MODEL ASSUMPTION \#\#\# A. BOX M
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results}\SpecialCharTok{$}\NormalTok{assump}\SpecialCharTok{$}\NormalTok{boxM}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Box's Homogeneity of Covariance Matrices Test 
+##  ───────────────────────────────────────────── 
+##    χ²     df    p             
+##  ───────────────────────────────────────────── 
+##      ᵃ    93              ᵃ   
+##  ───────────────────────────────────────────── 
+##    ᵃ Too few observations to calculate
+##    statistic. Each (sub)group must have at
+##    least as many observations as there are
+##    dependent variables.
+\end{verbatim}
+
+\hfill\break
+\#\#\# B. SHAPIRO WILK TEST
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results}\SpecialCharTok{$}\NormalTok{assump}\SpecialCharTok{$}\NormalTok{shapiro}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Shapiro-Wilk Multivariate Normality Test 
+##  ──────────────────────────────────────── 
+##    W            p            
+##  ──────────────────────────────────────── 
+##    0.7267987    < .0000001   
+##  ────────────────────────────────────────
+\end{verbatim}
+
+\hfill\break
+\#\#\# C. QQ-PLOT
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results}\SpecialCharTok{$}\NormalTok{assump}\SpecialCharTok{$}\NormalTok{qqPlot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Manova_files/figure-latex/unnamed-chunk-34-1.pdf}\\
+\#\# 6. MRPP : Multiresponse permutation procedures
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(travel\_df\_clean[,}\DecValTok{2}\SpecialCharTok{:}\DecValTok{3}\NormalTok{])}
+\NormalTok{y\_mat }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(y) }\CommentTok{\# square root transformation}
+\end{Highlighting}
+\end{Shaded}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y\_dist }\OtherTok{\textless{}{-}} \FunctionTok{vegdist}\NormalTok{(y\_mat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{mrpp }\OtherTok{\textless{}{-}} \FunctionTok{adonis2}\NormalTok{(y\_dist}\SpecialCharTok{\textasciitilde{}}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{race }\SpecialCharTok{*}\NormalTok{ travel\_df\_clean}\SpecialCharTok{$}\NormalTok{religion, }\AttributeTok{permutations =} \DecValTok{1000}\NormalTok{)}
+\NormalTok{mrpp}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Permutation test for adonis under reduced model
+## Terms added sequentially (first to last)
+## Permutation: free
+## Number of permutations: 1000
+## 
+## adonis2(formula = y_dist ~ travel_df_clean$race * travel_df_clean$religion, permutations = 1000)
+##                                                Df SumOfSqs      R2      F
+## travel_df_clean$race                            7  0.40884 0.15914 8.2778
+## travel_df_clean$religion                       10  0.09878 0.03845 1.4000
+## travel_df_clean$race:travel_df_clean$religion  14  0.67142 0.26135 6.7972
+## Residual                                      197  1.38997 0.54105       
+## Total                                         228  2.56901 1.00000       
+##                                                 Pr(>F)   
+## travel_df_clean$race                          0.007992 **
+## travel_df_clean$religion                      0.194805   
+## travel_df_clean$race:travel_df_clean$religion 0.031968 * 
+## Residual                                                 
+## Total                                                    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hfill\break
+
+\end{document}

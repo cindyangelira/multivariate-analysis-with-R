@@ -1,0 +1,356 @@
+---
+title: "Ordination Analysis"
+author: "Nadia Ahmad"
+date: "2023-04-09"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+# Cluster Analysis on Travel Discrimination
+\
+Dataset explanation:\
+**Variables:**\
+**Continuos**\
+- Q1_ = Travel frequency\
+- Q6_15 : checkin experience rate\
+- Q6_18 : fly experience rate\
+**Categorical**\
+- Q15 = Gender\
+- Q17 = Race\
+- Q18 = Religion\
+
+\
+## Library
+```{r,warning=FALSE,message=FALSE}
+library(readr)
+library(readxl)
+library(tidyverse)
+library(corrplot)
+library(ggfortify)
+library(FactoMineR)
+library(factoextra)
+library(gplots)
+library(ggpubr)
+library(magrittr)
+```
+
+## Read the dataset
+
+```{r}
+travel <- read_excel("data_ordination.xlsx")
+head(travel)
+```
+
+Dataset contains 231 rows and 14 columns which is still messy. Thus, we'll conduct some data preprocessing steps.\
+
+## DATA PREPROCESSING
+
+```{r}
+# First, drop two first rows. 
+travel <- travel %>% 
+  slice(-c(1,2))
+
+# Select used columns
+travel_df <- travel[c(1,5,6,9,12,13,14)]
+```
+\
+```{r}
+# CHECK MISSING VALUE----
+# Count the missing values by column wise
+print("Count of missing values by column wise")
+sapply(travel_df, function(x) sum(is.na(x)))
+
+# Missing value imputation
+# Since our data contains 46 missing value, let's impute with mode
+# Function to see mode
+calc_mode <- function(x){
+  
+  # List the distinct / unique values
+  distinct_values <- unique(na.omit(x))
+  
+  # Count the occurrence of each distinct value
+  distinct_tabulate <- tabulate(match(x, distinct_values))
+  
+  # Return the value with the highest occurrence
+  distinct_values[which.max(distinct_tabulate)]
+}
+
+# Impute missing value----
+travel_df <- travel_df %>% 
+  mutate(across(everything(), ~replace_na(.x, calc_mode(.x))))
+```
+\
+```{r}
+# Rename column name
+travel_df_clean <- travel_df %>% 
+       rename(respondent_id =1, travel_frequency = 2, checkin_exp = 3,
+              fly_exp = 4, gender = 5, race=6,
+              religion = 7)
+head(travel_df_clean)
+```
+\
+
+```{r}
+# CONVERT DATA TYPE----
+# Convert all variables into integer
+# Convert column 2 to 6 to numeric
+travel_df_clean[,2:4] <- lapply(travel_df_clean[,2:4], as.numeric)
+travel_df_clean[,5:7] <- lapply(travel_df_clean[,5:7], as.factor)
+travel_df_clean[,5:7] <- lapply(travel_df_clean[,5:7], as.integer)
+head(travel_df_clean)
+```
+## Correspondence Analysis
+### Data Exploration
+```{r}
+# set respondent_id as index
+travel_df_clean <- travel_df_clean %>% column_to_rownames(., var = "respondent_id")
+head(travel_df_clean)
+```
+
+```{r}
+# convert data into contingency table
+df1 = travel_df_clean[,-c(2)]
+dt = as.table(as.matrix(df1))
+
+# graph
+balloonplot(t(dt[1:15,]), main = "Travel Discriminations", xlab ="",
+            ylab = "", label= FALSE, show.margins = FALSE)
+```
+
+```{r}
+res_ca <- CA(df1, graph = T)
+print(res_ca)
+```
+
+```{r}
+# eigen values
+eig_val <- get_eigenvalue(res_ca)
+eig_val
+```
+
+```{r, warning=F, message=F}
+# Statistical Significance 1
+chisq <- chisq.test(travel_df_clean)
+chisq
+```
+
+```{r}
+# statistical significance 2
+summary(res_ca)
+```
+
+### Scree Plot
+```{r}
+fviz_screeplot(res_ca, addlabels = TRUE, ylim = c(0, 50))
+```
+```{r}
+fviz_screeplot(res_ca) +
+ geom_hline(yintercept=25, linetype=2, color="red")
+```
+### BiPlot
+```{r}
+# repel= TRUE to avoid text overlapping
+#options(ggrepel.max.overlaps = Inf)
+fviz_ca_biplot(res_ca, repel = TRUE)
+```
+
+### Graph of row Variables
+```{r}
+row <- get_ca_row(res_ca)
+row
+```
+
+#### Access the Row Component
+```{r}
+# Coordinates
+head(row$coord)
+# Cos2: quality on the factore map
+head(row$cos2)
+# Contributions to the principal components
+head(row$contrib)
+```
+
+#### Coordinates Row Points
+```{r}
+fviz_ca_row(res_ca, repel = TRUE)
+```
+#### Quality of Representation of Rows
+```{r}
+# Color by cos2 values: quality on the factor map
+fviz_ca_row(res_ca, col.row = "cos2",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), 
+             repel = TRUE)
+```
+
+```{r}
+# Change the transparency by cos2 values
+fviz_ca_row(res_ca, alpha.row="cos2")
+```
+
+#### Corrplot
+```{r}
+corrplot(row$cos2[1:15,], is.corr=FALSE)
+```
+
+```{r}
+# Cos2 of rows on Dim.1 and Dim.2
+fviz_cos2(res_ca, choice = "row", axes = 1:2)
+```
+#### Contributions of rows to the dimensions
+```{r}
+corrplot(row$contrib[1:15,], is.corr=FALSE) 
+```
+
+```{r}
+# Contributions of rows to dimension 1
+fviz_contrib(res_ca, choice = "row", axes = 1, top = 10)
+# Contributions of rows to dimension 2
+fviz_contrib(res_ca, choice = "row", axes = 2, top = 10)
+```
+
+```{r}
+# Total contribution to dimension 1 and 2
+fviz_contrib(res_ca, choice = "row", axes = 1:2, top = 10)
+```
+
+```{r}
+fviz_ca_row(res_ca, col.row = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), 
+             repel = TRUE)
+```
+
+```{r}
+# Change the transparency by contrib values
+fviz_ca_row(res_ca, alpha.row="contrib",
+             repel = TRUE)
+```
+### Graph of column Variables
+```{r, warning=FALSE, message=FALSE}
+col <- get_ca_col(res_ca)
+col
+```
+
+```{r}
+# Coordinates of column points
+head(col$coord)
+# Quality of representation
+head(col$cos2)
+# Contributions
+head(col$contrib)
+```
+
+```{r}
+fviz_ca_col(res_ca)
+```
+
+```{r}
+fviz_ca_col(res_ca, col.col = "cos2", 
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE)
+```
+
+```{r}
+fviz_cos2(res_ca, choice = "col", axes = 1:2)
+```
+
+```{r}
+fviz_contrib(res_ca, choice = "col", axes = 1:2)
+```
+#### Symmetric Biplot
+```{r}
+fviz_ca_biplot(res_ca, repel = TRUE)
+```
+### Asymmetric Biplot
+```{r}
+fviz_ca_biplot(res_ca, 
+               map ="rowprincipal", arrow = c(TRUE, TRUE),
+               repel = TRUE)
+```
+### Contribution Biplot
+```{r}
+fviz_ca_biplot(res_ca, map ="colgreen", arrow = c(TRUE, FALSE),
+               repel = TRUE)
+```
+### Dimension Description
+```{r}
+# Dimension description
+res_desc <- dimdesc(res_ca, axes = c(1,2))
+# Description of dimension 1 by row points
+head(res_desc[[1]]$row)
+# Description of dimension 1 by column points
+head(res_desc[[1]]$col)
+```
+
+```{r}
+# Description of dimension 2 by row points
+head(res_desc[[2]]$row)
+# Description of dimension 1 by column points
+head(res_desc[[2]]$col)
+```
+
+## Multidimensional Scaling (MDS)
+```{r}
+# Cmpute MDS
+mds <- df1 %>%
+  dist() %>%          
+  cmdscale() %>%
+  as_tibble()
+colnames(mds) <- c("Dim.1", "Dim.2")
+
+# Plot MDS
+ggscatter(mds, x = "Dim.1", y = "Dim.2", 
+          label = rownames(df1),
+          size = 1,
+          repel = TRUE)
+```
+#### Create 3 groups k-means clustering
+```{r}
+# K-means clustering
+clust <- kmeans(mds, 2)$cluster %>%
+  as.factor()
+mds <- mds %>%
+  mutate(groups = clust)
+# Plot and color by groups
+ggscatter(mds, x = "Dim.1", y = "Dim.2", 
+          label = rownames(df1),
+          color = "groups",
+          palette = "jco",
+          size = 1, 
+          ellipse = TRUE,
+          ellipse.type = "convex",
+          repel = TRUE)
+```
+## Cannonical Correspondence Analysis
+```{r, warning=FALSE, message=FALSE}
+library(vegan)
+```
+
+```{r}
+t1 = as.matrix(df1)
+example_NMDS=metaMDS(t1,k=2,trymax=100)
+```
+```{r}
+stressplot(example_NMDS)
+```
+
+```{r}
+plot(example_NMDS)
+```
+
+```{r}
+# First, create a vector of color values corresponding of the 
+# same length as the vector of treatment values
+treat=c(rep("Treatment1",5),rep("Treatment2",5))
+colors=c(rep("red",5),rep("blue",5))
+ordiplot(example_NMDS,type="n")
+#Plot convex hulls with colors baesd on treatment
+for(i in unique(treat)) {
+  ordihull(example_NMDS$point[grep(i,treat),],draw="polygon",
+   groups=treat[treat==i],col=colors[grep(i,treat)],label=F) } 
+orditorp(example_NMDS,display="species",col="red",air=0.01)
+orditorp(example_NMDS,display="sites",col=c(rep("green",5),
+  rep("blue",5)),air=0.01,cex=1.25)
+```

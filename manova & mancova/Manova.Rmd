@@ -1,0 +1,379 @@
+---
+title: "MANOVA"
+author: "Nadia Ahmad"
+date: "2023-03-17"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+---
+
+# MANOVA Model on Travel Discrimination
+\
+Dataset explanation:\
+**Dependent Variable:**\
+- Q6_15 : checkin experience rate\
+- Q6_18 : fly experience rate\
+**Independent Variables:**\
+**Categorical**\
+- Q15 = Gender\
+- Q17 = Race\
+- Q18 = Religion\
+**Continuos**\
+- Q1_ = Travel frequency\
+\
+## Library
+```{r,warning=FALSE,message=FALSE}
+library(readr)
+library(readxl)
+library(tidyverse)
+library(corrplot)
+library(MASS)
+library(mvtnorm)
+library(MVN)
+library(psych)
+library(ggfortify)
+library(ggpubr)
+library(mvoutlier)
+library(heplots)
+library(biotools)
+library(emmeans)
+library(jmv)
+library(vegan)
+```
+
+## Read the dataset
+
+```{r}
+travel <- read_excel("data_manova.xlsx")
+head(travel)
+```
+
+Dataset contains 231 rows and 14 columns which is still messy. Thus, we'll conduct some data preprocessing steps.\
+
+## DATA PREPROCESSING
+
+```{r}
+# First, drop two first rows. Next, filter only data that has 100 in progress
+travel <- travel %>% 
+  slice(-c(1,2))
+
+# Select used columns
+travel_df <- travel[c(5,6,9,12,13,14)]
+```
+\
+```{r}
+# CHECK MISSING VALUE----
+# Count the missing values by column wise
+print("Count of missing values by column wise")
+sapply(travel_df, function(x) sum(is.na(x)))
+
+# Missing value imputation
+# Since our data contains 46 missing value, let's impute with mode
+# Function to see mode
+calc_mode <- function(x){
+  
+  # List the distinct / unique values
+  distinct_values <- unique(na.omit(x))
+  
+  # Count the occurrence of each distinct value
+  distinct_tabulate <- tabulate(match(x, distinct_values))
+  
+  # Return the value with the highest occurrence
+  distinct_values[which.max(distinct_tabulate)]
+}
+
+# Impute missing value----
+travel_df <- travel_df %>% 
+  mutate(across(everything(), ~replace_na(.x, calc_mode(.x))))
+```
+\
+```{r}
+# Rename column name
+travel_df_clean <- travel_df %>% 
+       rename(travel_frequency = 1, checkin_exp = 2,
+              fly_exp = 3, gender = 4, race=5,
+              religion = 6)
+head(travel_df_clean)
+```
+\
+
+```{r}
+# CONVERT DATA TYPE----
+# Convert all variables into integer
+# Convert column 2 to 6 to numeric
+travel_df_clean[,1:3] <- lapply(travel_df_clean[,1:3], as.numeric)
+travel_df_clean[,4:6] <- lapply(travel_df_clean[,4:6], as.factor)
+head(travel_df_clean)
+```
+
+## 1. INTERACTION PLOT
+#### Checkin Experience Rate
+##### Gender vs Race
+```{r}
+interaction.plot(
+  x.factor = travel_df_clean$race,
+  trace.factor = travel_df_clean$gender,
+  response = travel_df_clean$checkin_exp,
+  type="b", col=c(1:4),
+  ylab = "Checkin Experience Rate",
+  xlab = "Races",
+  trace.label = "Gender",
+  main="Interaction Plot",
+  leg.bty="o", leg.bg="beige", lwd=2,
+)
+```
+
+##### Gender vs Religion
+```{r}
+interaction.plot(
+  x.factor = travel_df_clean$religion,
+  trace.factor = travel_df_clean$gender,
+  response = travel_df_clean$checkin_exp,
+  type="b", col=c(1:4),
+  ylab = "Checkin Experience Rate",
+  xlab = "Religion",
+  trace.label = "Gender",
+  main="Interaction Plot",
+  leg.bty="o", leg.bg="beige", lwd=2,
+)
+```
+
+##### Race vs Religion
+```{r}
+interaction.plot(
+  x.factor = travel_df_clean$religion,
+  trace.factor = travel_df_clean$race,
+  response = travel_df_clean$checkin_exp,
+  type="b", col=c(1:8),
+  ylab = "Checkin Experience Rate",
+  xlab = "Religion",
+  trace.label = "Race",
+  main="Interaction Plot",
+  leg.bty="o", leg.bg="beige", lwd=2
+)
+```
+
+#### fly Claim Experience Rate
+##### Gender vs Race
+```{r}
+interaction.plot(
+  x.factor = travel_df_clean$race,
+  trace.factor = travel_df_clean$gender,
+  response = travel_df_clean$fly_exp,
+  type="b", col=c(1:4),
+  ylab = "Flight Experience Rate",
+  xlab = "Races",
+  trace.label = "Gender",
+  main="Interaction Plot",
+  leg.bty="o", leg.bg="beige", lwd=2,
+)
+```
+
+##### Gender vs Religion
+```{r}
+interaction.plot(
+  x.factor = travel_df_clean$religion,
+  trace.factor = travel_df_clean$gender,
+  response = travel_df_clean$fly_exp,
+  type="b", col=c(1:4),
+  ylab = "Flight Experience Rate",
+  xlab = "Religion",
+  trace.label = "Gender",
+  main="Interaction Plot",
+  leg.bty="o", leg.bg="beige", lwd=2,
+)
+```
+
+##### Race vs Religion
+```{r}
+interaction.plot(
+  x.factor = travel_df_clean$religion,
+  trace.factor = travel_df_clean$race,
+  response = travel_df_clean$fly_exp,
+  type="b", col=c(1:8),
+  ylab = "Flight Experience Rate",
+  xlab = "Religion",
+  trace.label = "Race",
+  main="Interaction Plot",
+  leg.bty="o", leg.bg="beige", lwd=2
+)
+```
+
+## 2. MANOVA
+### ANOVA WITH INTERACTION : Gender and Religion as Factors
+#### Dependent : checkin experience
+```{r}
+aov_1 <- aov(checkin_exp ~ gender * religion, data = travel_df_clean)
+summary(aov_1)
+```
+
+#### Dependent : fly claim experience
+```{r}
+aov_2 <- aov(fly_exp ~ gender * religion, data = travel_df_clean)
+summary(aov_2)
+```
+
+### ANOVA WITH INTERACTION : Gender and Race as Factors
+#### Dependent : checkin experience
+```{r}
+aov_1_ <- aov(checkin_exp ~ gender * race, data = travel_df_clean)
+summary(aov_1_)
+```
+
+#### Dependent : fly claim experience
+```{r}
+aov_2_ <- aov(fly_exp ~ gender * race, data = travel_df_clean)
+summary(aov_2_)
+```
+
+### ANOVA WITH INTERACTION : Religion and Race as Factors
+#### Dependent : checkin experience
+```{r}
+aov_1_1 <- aov(checkin_exp ~ religion * race, data = travel_df_clean)
+summary(aov_1_1)
+```
+
+#### Dependent : fly claim experience
+```{r}
+aov_1_2 <- aov(fly_exp ~ religion * race, data = travel_df_clean)
+summary(aov_1_2)
+```
+
+### TWO WAY MANOVA WITH INTERACTION : Gender and Race as Factors
+```{r}
+manova1 <- manova(cbind(checkin_exp, fly_exp) ~ gender*race, data=travel_df_clean)
+summary(manova1)
+summary.aov(manova1)
+```
+
+### TWO WAY MANOVA WITH INTERACTION : Gender and Religion as Factors
+```{r}
+manova2 <- manova(cbind(checkin_exp, fly_exp) ~ gender*religion, data=travel_df_clean)
+summary(manova2)
+summary.aov(manova2)
+```
+
+### TWO WAY MANOVA WITH INTERACTION : Gender and Religion as Factors
+```{r}
+manova3 <- manova(cbind(checkin_exp, fly_exp) ~ race*religion, data=travel_df_clean)
+summary(manova3)
+summary.aov(manova3)
+```
+
+### ASSUMPTION TEST : PILLAI
+```{r}
+summary(manova3,
+        test = "Pillai")
+```
+
+### ASSUMPTION TEST : WILKS
+```{r}
+summary(manova3,
+        test = "Wilks")
+```
+\
+### ASSUMPTION TEST : HOTELLING-LAWLEY
+```{r}
+summary(manova3,
+        test = "Hotelling-Lawley")
+```
+
+### ASSUMPTION TEST : ROY
+```{r}
+summary(manova3,
+        test = "Roy")
+```
+Assume now, we'll go with religion and race as factors based on MANOVA result.\
+
+## 3. CONTRAST 
+### Univariate Contrast
+#### Race
+```{r}
+M <- lm(cbind(checkin_exp, fly_exp) ~ race + religion, data = travel_df_clean)
+anova(M)
+mvpaircomp(M, factor1 = "race")
+```
+#### Religion
+```{r}
+M <- lm(cbind(checkin_exp, fly_exp) ~ race + religion, data = travel_df_clean)
+anova(M)
+mvpaircomp(M, factor1 = "religion")
+```
+### Multivariate Contrast
+```{r}
+MOats.lm <- lm(cbind(checkin_exp, fly_exp) ~ race + religion, data = travel_df_clean)
+MOats.emm <- emmeans(MOats.lm, ~ race| rep.meas)
+mvcontrast(MOats.emm, "consec", show.ests = TRUE) 
+```
+\
+```{r}
+MOats.lm2 <- lm(cbind(checkin_exp, fly_exp) ~ race + religion, data = travel_df_clean)
+MOats.emm2 <- emmeans(MOats.lm, ~ religion| rep.meas)
+mvcontrast(MOats.emm2, "consec", show.ests = TRUE) 
+```
+
+## 4. MANCOVA
+#### Plot : travel_frequency vs checkin_exp
+```{r}
+plot(travel_df_clean$travel_frequency, travel_df_clean$checkin_exp, main="Scatterplot of Travel Frequency vs Check In Experience Rate",
+   xlab="travel_frequency ", ylab="Check_in_exp ", pch=19)
+```
+#### Plot : travel_frequency vs flight_exp
+```{r}
+plot(travel_df_clean$travel_frequency, travel_df_clean$fly_exp, main="Scatterplot of Travel Frequency vs Flight Experience Rate",
+   xlab="travel_frequency ", ylab="flight_exp ", pch=19)
+```
+Now we add travel_frequency as covariates.
+\
+```{r, warning=FALSE}
+results <- mancova(data = travel_df_clean,
+        deps = vars(checkin_exp, fly_exp),
+        factors = vars(race, religion),
+        covs = travel_frequency,
+        multivar = list("pillai", "wilks", "hotel", "roy"), boxM = T,
+        shapiro = T, qqPlot = T)
+```
+
+### MULTIVARIATE MANCOVA
+```{r}
+results$multivar
+```
+
+#### UNIVARIATE MANCOVA
+```{r}
+results$univar
+```
+
+## 5. MODEL ASSUMPTION
+### A. BOX M
+```{r}
+results$assump$boxM
+```
+
+### B. SHAPIRO WILK TEST
+```{r}
+results$assump$shapiro
+```
+
+### C. QQ-PLOT
+```{r}
+results$assump$qqPlot
+```
+
+## 6. MRPP : Multiresponse permutation procedures
+```{r}
+y <- as.matrix(travel_df_clean[,2:3])
+y_mat <- sqrt(y) # square root transformation
+```
+\
+```{r, warning=F}
+y_dist <- vegdist(y_mat)
+```
+
+```{r}
+set.seed(123)
+mrpp <- adonis2(y_dist~ travel_df_clean$race * travel_df_clean$religion, permutations = 1000)
+mrpp
+```
+\

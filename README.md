@@ -31,7 +31,8 @@ Data source is ...
 2. Raw Data is being kept [here](https://github.com/cindyangelira/multivariate-analysis/tree/master/dataa) within this repo.
 3. Data processing/transformation scripts are being kept [here](https://github.com/cindyangelira/multivariate-analysis/tree/master/src)
 4. Installing dependencies
-```ipak <- function(pkg){
+```
+ipak <- function(pkg){
     new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
     if (length(new.pkg)) 
         install.packages(new.pkg, dependencies = TRUE)

@@ -1,0 +1,344 @@
+---
+title: "Clustering Analysis"
+author: "Nadia Ahmad"
+date: "2023-04-02"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+# Cluster Analysis on Travel Discrimination
+\
+Dataset explanation:\
+**Variables:**\
+**Continuos**\
+- Q1_ = Travel frequency\
+- Q6_15 : checkin experience rate\
+- Q6_18 : fly experience rate\
+**Categorical**\
+- Q15 = Gender\
+- Q17 = Race\
+- Q18 = Religion\
+
+\
+## Library
+```{r,warning=FALSE,message=FALSE}
+library(readr)
+library(readxl)
+library(tidyverse)
+library(corrplot)
+library(MASS)
+library(ggfortify)
+library(ggpubr)
+library(pvclust)
+library(cluster)
+library(fpc)
+library(factoextra)
+library(gridExtra)
+```
+
+## Read the dataset
+
+```{r}
+travel <- read_excel("data_clustering.xlsx")
+head(travel)
+```
+
+Dataset contains 231 rows and 14 columns which is still messy. Thus, we'll conduct some data preprocessing steps.\
+
+## DATA PREPROCESSING
+
+```{r}
+# First, drop two first rows. Next, filter only data that has 100 in progress
+travel <- travel %>% 
+  slice(-c(1,2))
+
+# Select used columns
+travel_df <- travel[c(1,5,6,9,12,13,14)]
+```
+\
+```{r}
+# CHECK MISSING VALUE----
+# Count the missing values by column wise
+print("Count of missing values by column wise")
+sapply(travel_df, function(x) sum(is.na(x)))
+
+# Missing value imputation
+# Since our data contains 46 missing value, let's impute with mode
+# Function to see mode
+calc_mode <- function(x){
+  
+  # List the distinct / unique values
+  distinct_values <- unique(na.omit(x))
+  
+  # Count the occurrence of each distinct value
+  distinct_tabulate <- tabulate(match(x, distinct_values))
+  
+  # Return the value with the highest occurrence
+  distinct_values[which.max(distinct_tabulate)]
+}
+
+# Impute missing value----
+travel_df <- travel_df %>% 
+  mutate(across(everything(), ~replace_na(.x, calc_mode(.x))))
+```
+\
+```{r}
+# Rename column name
+travel_df_clean <- travel_df %>% 
+       rename(respondent_id =1, travel_frequency = 2, checkin_exp = 3,
+              fly_exp = 4, gender = 5, race=6,
+              religion = 7)
+head(travel_df_clean)
+```
+\
+
+```{r}
+# CONVERT DATA TYPE----
+# Convert all variables into integer
+# Convert column 2 to 6 to numeric
+travel_df_clean[,2:4] <- lapply(travel_df_clean[,2:4], as.numeric)
+travel_df_clean[,5:7] <- lapply(travel_df_clean[,5:7], as.factor)
+head(travel_df_clean)
+```
+### Reproducibility
+Define seed number thus everytime we run the script, it yields the same result.
+```{r}
+set.seed(123)
+```
+
+## 1. Summary Statistics
+```{r}
+pairs(travel_df_clean[,-1])
+```
+
+```{r}
+summary(travel_df_clean)
+```
+
+### Standard Deviation of travel_frequency, checkin_experience, and fly_experience
+```{r}
+round(sqrt(apply(travel_df_clean[,2:4],2,var)),2)
+```
+Since our clustering method is distanced-based, we'll scale the numerical features. 
+### Scale Data 
+```{r}
+travel_df_clean[,2:4] <- scale(travel_df_clean[,2:4], center = T, scale = T)
+head(travel_df_clean)
+```
+Before that, we notice that our dataframe contains variables which is mixed data type, we'll try use Gower distance for Hierarchical Clustering.
+
+### Gower Distance 
+```{r}
+gower_dist <- daisy(travel_df_clean[,-1], metric = c("gower"))
+```
+
+But, since we also want to conduct k-means clustering, we will calculate distance between numerical variables only.
+### Euclidian Distance
+```{r}
+euc_dist <- dist(travel_df_clean[,2:4], method = "euclidian")
+```
+
+### Manhattan Distance
+```{r}
+manhat_dist <- dist(travel_df_clean[,2:4], method = "manhattan")
+```
+
+## 2. HIREARCHICAL CLUSTERING
+### Distance : Gower Distance for Mixed Data
+#### Single
+```{r}
+aggl_clust_s <- hclust(gower_dist, method = "single")
+plot(aggl_clust_s,
+     main = "Agglomerative, single linkages")
+```
+#### Complete
+```{r}
+aggl_clust_c <- hclust(gower_dist, method = "complete")
+plot(aggl_clust_c,
+     main = "Agglomerative, complete linkages")
+```
+### Distance : Euclidian Distance for Numerical Data Only
+#### Single
+```{r}
+aggl_clust_s_e <- hclust(euc_dist, method = "single")
+plot(aggl_clust_s_e,
+     main = "Agglomerative, single linkages")
+```
+
+#### Complete
+```{r}
+aggl_clust_c_e <- hclust(euc_dist, method = "complete")
+plot(aggl_clust_c_e,
+     main = "Agglomerative, complete linkages")
+```
+### Distance : Manhattan Distance for Numerical Data Only
+#### Single
+```{r}
+aggl_clust_s_m <- hclust(manhat_dist, method = "single")
+plot(aggl_clust_s_m,
+     main = "Agglomerative, single linkages")
+```
+#### Complete
+```{r}
+aggl_clust_c_m <- hclust(manhat_dist, method = "complete")
+plot(aggl_clust_c_m,
+     main = "Agglomerative, complete linkages")
+```
+## 3. NUMBER OF CLUSTER TO RETAIN
+```{r}
+cstats.table <- function(dist, tree, k) {
+clust.assess <- c("cluster.number","n","within.cluster.ss","average.within","average.between",
+                  "wb.ratio","dunn2","avg.silwidth")
+clust.size <- c("cluster.size")
+stats.names <- c()
+row.clust <- c()
+output.stats <- matrix(ncol = k, nrow = length(clust.assess))
+cluster.sizes <- matrix(ncol = k, nrow = k)
+for(i in c(1:k)){
+  row.clust[i] <- paste("Cluster-", i, " size")
+}
+for(i in c(2:k)){
+  stats.names[i] <- paste("Test", i-1)
+  
+  for(j in seq_along(clust.assess)){
+    output.stats[j, i] <- unlist(cluster.stats(d = dist, clustering = cutree(tree, k = i))[clust.assess])[j]
+    
+  }
+  
+  for(d in 1:k) {
+    cluster.sizes[d, i] <- unlist(cluster.stats(d = dist, clustering = cutree(tree, k = i))[clust.size])[d]
+    dim(cluster.sizes[d, i]) <- c(length(cluster.sizes[i]), 1)
+    cluster.sizes[d, i]
+    
+  }
+}
+output.stats.df <- data.frame(output.stats)
+cluster.sizes <- data.frame(cluster.sizes)
+cluster.sizes[is.na(cluster.sizes)] <- 0
+rows.all <- c(clust.assess, row.clust)
+# rownames(output.stats.df) <- clust.assess
+output <- rbind(output.stats.df, cluster.sizes)[ ,-1]
+colnames(output) <- stats.names[2:k]
+rownames(output) <- rows.all
+is.num <- sapply(output, is.numeric)
+output[is.num] <- lapply(output[is.num], round, 2)
+output
+}
+```
+
+### A. Gower Distance Complete Linkage
+#### Elbow Method
+```{r}
+ggplot(data = data.frame(t(cstats.table(gower_dist, aggl_clust_c, 10))), 
+  aes(x=cluster.number, y=within.cluster.ss)) + 
+  geom_point()+
+  geom_line()+
+  ggtitle("Agglomerative clustering") +
+  labs(x = "Num.of clusters", y = "Within clusters sum of squares (SS)") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+#### Silhouette
+```{r}
+ggplot(data = data.frame(t(cstats.table(gower_dist, aggl_clust_c, 10))), 
+  aes(x=cluster.number, y=avg.silwidth)) + 
+  geom_point()+
+  geom_line()+
+  ggtitle("Agglomerative clustering") +
+  labs(x = "Num.of clusters", y = "Average silhouette width") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+#### Print Member with k = 6
+```{r}
+member1 = cutree(aggl_clust_c,6)
+table(member1)
+```
+#### Characteristic Cluster
+```{r, warning=FALSE, message=FALSE}
+aggregate(travel_df_clean[,2:4],list(member1),mean)
+```
+```{r}
+plot(silhouette(cutree(aggl_clust_c,6), gower_dist))
+```
+### B. Manhattan Distance Complete Linkage
+#### Elbow Method
+```{r}
+ggplot(data = data.frame(t(cstats.table(manhat_dist, aggl_clust_c_m, 10))), 
+  aes(x=cluster.number, y=within.cluster.ss)) + 
+  geom_point()+
+  geom_line()+
+  ggtitle("Agglomerative clustering") +
+  labs(x = "Num.of clusters", y = "Within clusters sum of squares (SS)") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+#### Silhouette
+```{r}
+ggplot(data = data.frame(t(cstats.table(manhat_dist, aggl_clust_c_m, 10))), 
+  aes(x=cluster.number, y=avg.silwidth)) + 
+  geom_point()+
+  geom_line()+
+  ggtitle("Agglomerative clustering") +
+  labs(x = "Num.of clusters", y = "Average silhouette width") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+#### Print Member with k = 5
+```{r}
+member2 = cutree(aggl_clust_c_m,5)
+table(member2)
+```
+#### Characteristic Cluster
+```{r, warning=FALSE, message=FALSE}
+aggregate(travel_df_clean[,2:4],list(member2),mean)
+```
+```{r}
+plot(silhouette(cutree(aggl_clust_c_m,5), manhat_dist))
+```
+## 4. k-MEANS CLUSTERING
+```{r}
+k2 <- kmeans(travel_df_clean[,2:4], centers = 2)
+str(k2)
+```
+
+```{r}
+k2
+```
+\
+### CLUSTER PLOT
+```{r}
+fviz_cluster(k2, data = travel_df_clean[,2:4])
+```
+### OTHER POSSIBLE k for k-MEANS
+```{r}
+k3 <- kmeans(travel_df_clean[,2:4], centers = 3)
+k4 <- kmeans(travel_df_clean[,2:4], centers = 4)
+k5 <- kmeans(travel_df_clean[,2:4], centers = 5)
+
+# plots to compare
+p1 <- fviz_cluster(k2, geom = "point", data =travel_df_clean[,2:4]) + ggtitle("k = 2")
+p2 <- fviz_cluster(k3, geom = "point",  data = travel_df_clean[,2:4]) + ggtitle("k = 3")
+p3 <- fviz_cluster(k4, geom = "point",  data = travel_df_clean[,2:4]) + ggtitle("k = 4")
+p4 <- fviz_cluster(k5, geom = "point",  data = travel_df_clean[,2:4]) + ggtitle("k = 5")
+
+grid.arrange(p1, p2, p3, p4, nrow = 2)
+```
+### ELBOW METHOD
+```{r}
+fviz_nbclust(travel_df_clean[,2:4], kmeans, method = "wss")
+```
+### SILHOUETTE
+```{r}
+fviz_nbclust(travel_df_clean[,2:4], kmeans, method = "silhouette")
+```
+### OPTIMAL k = 4
+```{r}
+final <- kmeans(travel_df_clean[,2:4], 4)
+print(final)
+```
+\
+```{r}
+fviz_cluster(final, data = travel_df_clean[,2:4])
+```

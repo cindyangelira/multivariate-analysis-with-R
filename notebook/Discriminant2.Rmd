@@ -1,10 +1,3 @@
----
-title: "Discriminant Analysis"
-author: "cindy"
-date: "2023-02-18"
-output: pdf_document
----
-
 # PCA Analysis on Travel Discrimination
 \
 Dataset explanation:

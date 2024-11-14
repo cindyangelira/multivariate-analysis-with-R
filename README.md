@@ -1,7 +1,7 @@
 # Multivariate Analysis
-This project is a part of the [Data Science Project](https://xxx) in R. 
+This project is a example of various multivariate analysis using R.
 
-#### -- Project Status: [Active]
+#### -- Project Status: [Archieved]
 
 ## Project Intro/Objective
 The purpose of this project is to perform various approaches in multivariate analysis within R environment.
@@ -18,11 +18,6 @@ The purpose of this project is to perform various approaches in multivariate ana
 
 ### Technologies
 * R
-
-
-
-## Project Description
-Data source is ...
 
 
 ## Getting Started

@@ -1,6 +1,6 @@
 ---
 title: "Discriminant Analysis"
-author: "Nadia Ahmad"
+author: "cindy"
 date: "2023-02-18"
 output: pdf_document
 ---

@@ -1,6 +1,6 @@
 ---
 title: "MANOVA"
-author: "Nadia Ahmad"
+author: "cindy"
 date: "2023-03-17"
 output:
   word_document: default

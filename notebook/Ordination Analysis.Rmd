@@ -1,6 +1,6 @@
 ---
 title: "Ordination Analysis"
-author: "Nadia Ahmad"
+author: "cindy"
 date: "2023-04-09"
 output:
   pdf_document: default

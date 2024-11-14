@@ -1,6 +1,6 @@
 ---
 title: "PCA Analysis"
-author: "Nadia Ahmad"
+author: "cindy"
 date: "2023-02-09"
 output: pdf_document
 ---
